@@ -1,5 +1,7 @@
 # Command REPL
 
+Interactive prompt
+
 ## Install
 
 - go get github.com/wtnb75/go-cmdrepl

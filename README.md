@@ -2,6 +2,8 @@
 
 Interactive prompt
 
+[API reference](http://godoc.org/github.com/wtnb75/go-cmdrepl)
+
 ## Install
 
 - go get github.com/wtnb75/go-cmdrepl

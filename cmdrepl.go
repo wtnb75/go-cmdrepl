@@ -2,38 +2,47 @@ package cmdrepl
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/codegangsta/cli"
-	"log"
-	"os"
+	"github.com/peterh/liner"
 	"strings"
 )
 
 func ShellSplit(line string) (res []string, err error) {
-	res = strings.Split(line, " ")
+	scanner := bufio.NewScanner(strings.NewReader(line))
+	scanner.Split(bufio.ScanWords)
+	for scanner.Scan() {
+		res = append(res, scanner.Text())
+	}
 	err = nil
 	return
 }
 
 // for{ prompt, readline, shellsplit, call app.Run() }
 func CmdRepl(prompt string, app *cli.App) error {
-	rd := bufio.NewReader(os.Stdin)
+	line := liner.NewLiner()
+	defer line.Close()
+
+	line.SetCompleter(func(line string) (c []string) {
+		for _, n := range app.Commands {
+			if strings.HasPrefix(n.Name, line) {
+				c = append(c, n.Name)
+			}
+		}
+		return
+	})
 	for {
-		fmt.Printf("%s", prompt)
-		line, ispr, err := rd.ReadLine()
-		if err != nil {
-			return err
+		if l, err := line.Prompt(prompt); err == nil {
+			line.AppendHistory(l)
+			tokens, err := ShellSplit(l)
+			if err != nil {
+				return err
+			}
+			args := []string{tokens[0]}
+			args = append(args, tokens...)
+			app.Run(args)
+		} else {
+			break
 		}
-		lines := string(line)
-		log.Println("readline", lines, ispr, err)
-		tokens, err := ShellSplit(lines)
-		if err != nil {
-			return err
-		}
-		args := []string{tokens[0]}
-		args = append(args, tokens...)
-		log.Println("args", args)
-		app.Run(args)
 	}
 	return nil
 }

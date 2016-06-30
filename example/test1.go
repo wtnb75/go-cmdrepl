@@ -2,16 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/codegangsta/cli"
+
+	"github.com/urfave/cli"
 	"github.com/wtnb75/go-cmdrepl"
 )
 
-func hello(c *cli.Context) {
+func hello(c *cli.Context) error {
 	fmt.Println("Hello World")
+	return nil
 }
 
-func ls(c *cli.Context) {
+func ls(c *cli.Context) error {
 	fmt.Println("List World")
+	return nil
 }
 
 func main() {

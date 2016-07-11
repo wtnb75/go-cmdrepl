@@ -10,6 +10,9 @@ import (
 
 // CmdRepl : for{ prompt, readline, shellsplit, call app.Run() }
 func CmdRepl(prompt string, app *cli.App) error {
+	cli.OsExiter = func(rc int) {
+		return
+	}
 	line := liner.NewLiner()
 	defer line.Close()
 
@@ -95,7 +98,7 @@ func CmdRepl(prompt string, app *cli.App) error {
 			args := []string{tokens[0]}
 			args = append(args, tokens...)
 			if err = app.Run(args); err != nil {
-				break
+				continue
 			}
 		} else {
 			break

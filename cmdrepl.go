@@ -94,7 +94,9 @@ func CmdRepl(prompt string, app *cli.App) error {
 			}
 			args := []string{tokens[0]}
 			args = append(args, tokens...)
-			app.Run(args)
+			if err = app.Run(args); err != nil {
+				break
+			}
 		} else {
 			break
 		}

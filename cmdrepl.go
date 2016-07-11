@@ -98,7 +98,13 @@ func CmdRepl(prompt string, app *cli.App) error {
 			args := []string{tokens[0]}
 			args = append(args, tokens...)
 			if err = app.Run(args); err != nil {
-				continue
+				switch err.(type) {
+				default:
+					return err
+				case *cli.ExitError:
+					// no help topic for xxx
+					continue
+				}
 			}
 		} else {
 			break

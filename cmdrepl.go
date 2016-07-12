@@ -100,6 +100,9 @@ func CmdRepl(prompt string, app *cli.App) error {
 			if err = app.Run(args); err != nil {
 				switch err.(type) {
 				default:
+					if strings.HasPrefix(err.Error(), "flag provided but not defined") {
+						continue
+					}
 					return err
 				case *cli.ExitError:
 					// no help topic for xxx

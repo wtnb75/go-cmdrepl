@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/urfave/cli"
 	"github.com/wtnb75/go-cmdrepl"
@@ -60,5 +61,6 @@ func main() {
 			},
 		},
 	}
-	cmdrepl.CmdRepl("test> ", app)
+	err := cmdrepl.CmdRepl("test> ", app)
+	log.Printf("err: %#+v", err)
 }

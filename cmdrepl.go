@@ -1,6 +1,8 @@
 package cmdrepl
 
 import (
+	"fmt"
+	"os"
 	"strings"
 
 	"github.com/mattn/go-shellwords"
@@ -100,10 +102,11 @@ func CmdRepl(prompt string, app *cli.App) error {
 			if err = app.Run(args); err != nil {
 				switch err.(type) {
 				default:
-					if strings.HasPrefix(err.Error(), "flag provided but not defined") {
-						continue
+					if strings.HasPrefix(err.Error(), "exit") {
+						return err
 					}
-					return err
+					fmt.Fprintf(os.Stderr, "error: %+v\n", err)
+					continue
 				case *cli.ExitError:
 					// no help topic for xxx
 					continue
